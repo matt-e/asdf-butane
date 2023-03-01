@@ -42,7 +42,7 @@ download_release() {
   machine=$(uname -m)
   [ "${machine}" == "arm64" ] && machine="aarch64"
   os=$(uname -s)
-  [[ "${os}" == "Linux" ]] && os="unknown-linux"
+  [[ "${os}" == "Linux" ]] && os="unknown-linux-gnu"
   [[ "${os}" == "Darwin" ]] && os="apple-darwin"
 
   # https://github.com/coreos/butane/releases/download/v0.17.0/butane-aarch64-apple-darwin
