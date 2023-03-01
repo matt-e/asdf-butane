@@ -40,10 +40,10 @@ download_release() {
 
   # construct target triplet
   machine=$(uname -m)
-  [[ "${machine}" -eq "arm64" ]] && machine="aarch64"
+  [ "${machine}" == "arm64" ] && machine="aarch64"
   os=$(uname -s)
-  [[ "${os}" -eq "Linux" ]] && os="unknown-linux"
-  [[ "${os}" -eq "Darwin" ]] && os="apple-darwin"
+  [[ "${os}" == "Linux" ]] && os="unknown-linux"
+  [[ "${os}" == "Darwin" ]] && os="apple-darwin"
 
   # https://github.com/coreos/butane/releases/download/v0.17.0/butane-aarch64-apple-darwin
   url="$GH_REPO/releases/download/v${version}/butane-${machine}-${os}"
