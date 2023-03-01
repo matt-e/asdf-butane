@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for butane.
 GH_REPO="https://github.com/coreos/butane"
 TOOL_NAME="butane"
 TOOL_TEST="butane --version"
@@ -31,8 +30,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function if butane has other means of determining installable versions.
   list_github_tags
 }
 
@@ -41,8 +38,15 @@ download_release() {
   version="$1"
   filename="$2"
 
-  # TODO: Adapt the release URL convention for butane
-  url="$GH_REPO/archive/v${version}.tar.gz"
+  # construct target triplet
+  machine=$(uname -m)
+  [[ "${machine}" -eq "arm64" ]] && machine="aarch64"
+  os=$(uname -s)
+  [[ "${os}" -eq "Linux" ]] && os="unknown-linux"
+  [[ "${os}" -eq "Darwin" ]] && os="apple-darwin"
+
+  # https://github.com/coreos/butane/releases/download/v0.17.0/butane-aarch64-apple-darwin
+  url="$GH_REPO/releases/download/v${version}/butane-${machine}-${os}"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -61,7 +65,6 @@ install_version() {
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-    # TODO: Assert butane executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
